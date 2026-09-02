@@ -101,6 +101,7 @@ const CommunityRenderer99 = lazy(() => import("../shaders/neuform-isolated/Neufo
 const CommunityRenderer100 = lazy(() => import("../shaders/neuform-isolated/NeuformBatchEffects").then((module) => ({ default: module.DefenseLines })));
 const CommunityRenderer101 = lazy(() => import("../shaders/neuform-isolated/NeuformBatchEffects").then((module) => ({ default: module.TopoField })));
 const CommunityRenderer102 = lazy(() => import("../shaders/brand-orbs/BrandOrbs").then((module) => ({ default: module.BrandOrbs })));
+const CommunityRenderer103 = lazy(() => import("../shaders/section-elements/SectionElements").then((module) => ({ default: module.TriggerScrollSection })));
 
 export type ContractRow = { name: string; type: string; value: string };
 export type RangeControl = { kind?: "range"; key: string; label: string; min: number; max: number; step: number; digits: number; default: number };
@@ -16507,7 +16508,70 @@ export const READY_SHADERS: readonly ReadyShader[] = [
         }
       }
     ]
-  }, component: CommunityRenderer102 }
+  }, component: CommunityRenderer102 },
+  { ...{
+    "id": "trigger-scroll",
+    "tags": [
+      "css",
+      "dom",
+      "section",
+      "scroll",
+      "scroll-trigger",
+      "image-sequence",
+      "product-reveal",
+      "automotive",
+      "unbranded"
+    ],
+    "category": "Sections",
+    "label": "Trigger Scroll",
+    "thumbnail": "https://threeui.com/thumbnails/trigger-scroll.jpg",
+    "description": "A pinned stage steps through a five-frame product reveal as the panel is scrolled, crossfading frames and copy at each threshold.",
+    "runtime": "DOM + CSS",
+    "origin": "HTML Pages",
+    "sourceCommit": "SHA-256 6f2a91c58e0d",
+    "sourceFiles": [
+      "Original captures — EV platform reveal sequence",
+      "src/shaders/section-elements/SectionElements.tsx",
+      "src/shaders/section-elements/section-elements.css"
+    ],
+    "passes": "1 sticky-stage DOM/CSS composition",
+    "interaction": "Internal scroll drives frame, copy, and progress-dot state with a snap-per-step scroller",
+    "asset": "5 local WebP reveal frames",
+    "assetCount": 5,
+    "importName": "TriggerScrollSection",
+    "contract": [
+      {
+        "name": "renderer",
+        "type": "host",
+        "value": "React DOM + scoped CSS"
+      },
+      {
+        "name": "source",
+        "type": "fixed",
+        "value": "Owner-selected reference captures"
+      },
+      {
+        "name": "theme",
+        "type": "fixed",
+        "value": "Dark"
+      },
+      {
+        "name": "layout",
+        "type": "responsive",
+        "value": "Container-relative 16:9 composition"
+      },
+      {
+        "name": "motion",
+        "type": "adaptive",
+        "value": "Reduced-motion safe"
+      },
+      {
+        "name": "assets",
+        "type": "owned",
+        "value": "Local reveal frames"
+      }
+    ]
+  }, component: CommunityRenderer103 }
 ];
 export const VISIBLE_READY_SHADERS = READY_SHADERS.filter((shader) => !shader.variantOf);
 export const READY_SHADER_COLLECTION_COUNT = VISIBLE_READY_SHADERS.reduce((total, shader) => total + (shader.variants?.length || 1), 0);

@@ -97,6 +97,7 @@ export { ThinkingButton } from "./package-components/ThinkingButton";
 export { ThreeUIIntro } from "./package-components/ThreeUIIntro";
 export { TopoField } from "./package-components/TopoField";
 export { TopologyField } from "./package-components/TopologyField";
+export { TriggerScrollSection } from "./package-components/TriggerScrollSection";
 export { TypographyVortexCanvas } from "./package-components/TypographyVortexCanvas";
 export { UplinkLoader } from "./package-components/UplinkLoader";
 export { VoidField } from "./package-components/VoidField";

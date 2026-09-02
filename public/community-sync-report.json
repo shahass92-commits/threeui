@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "generatedAt": "2026-08-25T10:26:00.704Z",
   "sourceCommit": "bab60dad20e2290cf8e35753bf4fec14c017567e",
-  "communityParents": 43,
-  "communityRoutes": 104,
+  "communityParents": 44,
+  "communityRoutes": 105,
   "communityVariants": 147,
   "excludedProParents": 86,
   "excludedBetaParents": 23,
@@ -1083,6 +1083,12 @@
         "linkedin": [],
         "email": []
       }
+    },
+    {
+      "id": "trigger-scroll",
+      "variantIds": [],
+      "controlKeys": [],
+      "variantControlKeys": {}
     }
   ]
 }

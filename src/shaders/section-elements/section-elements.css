@@ -582,6 +582,158 @@
   }
 }
 
+/* ---------------------------------------------------------------- *
+   Trigger Scroll
+
+   An internally scrollable frame drives a pinned stage through a short
+   image sequence: five spacer panels set the scroll distance, the stage
+   sticks within that distance, and the active frame crossfades in as
+   scroll progress crosses each threshold. Scoped to the component's own
+   scroller so the effect works the same inside a small preview card as
+   it would pinned to page scroll.
+ * ---------------------------------------------------------------- */
+.section-element--trigger-scroll {
+  cursor: ns-resize;
+}
+
+.trigger-scroll__sr-instructions {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.trigger-scroll__frame {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  scrollbar-width: none;
+}
+
+.trigger-scroll__frame::-webkit-scrollbar {
+  display: none;
+}
+
+.trigger-scroll__track {
+  position: relative;
+  width: 100%;
+  height: calc(var(--trigger-scroll-steps) * 100cqh);
+}
+
+.trigger-scroll__spacer {
+  height: 100cqh;
+  scroll-snap-align: start;
+}
+
+.trigger-scroll__stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100cqh;
+}
+
+.trigger-scroll__images,
+.trigger-scroll__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.trigger-scroll__image {
+  opacity: 0;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.6s ease;
+}
+
+.trigger-scroll__image.is-active {
+  opacity: 1;
+}
+
+.trigger-scroll__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.15) 38%, rgba(0, 0, 0, 0) 62%);
+}
+
+.trigger-scroll__progress {
+  position: absolute;
+  top: clamp(16px, 4cqh, 32px);
+  right: clamp(16px, 3.5cqw, 32px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trigger-scroll__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.4s ease, transform 0.4s ease;
+}
+
+.trigger-scroll__dot.is-active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+.trigger-scroll__copy {
+  position: absolute;
+  right: clamp(16px, 4.5cqw, 56px);
+  bottom: clamp(18px, 5cqh, 48px);
+  left: clamp(16px, 4.5cqw, 56px);
+  z-index: 2;
+}
+
+.trigger-scroll__label {
+  margin-bottom: clamp(8px, 2cqh, 16px);
+}
+
+.trigger-scroll__copy h2 {
+  margin: 0;
+  font-size: clamp(16px, 3.4cqw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.trigger-scroll__copy p {
+  margin: clamp(6px, 1.6cqh, 12px) 0 0;
+  max-width: 46ch;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: clamp(10px, 1.7cqw, 18px);
+  font-weight: 300;
+  line-height: 1.45;
+}
+
+.trigger-scroll__hint {
+  position: absolute;
+  top: clamp(16px, 4cqh, 32px);
+  left: clamp(16px, 4.5cqw, 56px);
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: clamp(9px, 1.4cqw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.trigger-scroll__hint.is-hidden {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .section-element *,
   .section-element *::before,
