@@ -1,10 +1,26 @@
-import { useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 
 import "./section-elements.css";
 
 const testimonialIllustration = new URL("./assets/testimonials-illustration.svg", import.meta.url).href;
 const testimonialKeyboard = new URL("./assets/testimonials-keyboard.svg", import.meta.url).href;
 const testimonialDots = new URL("./assets/testimonials-dots.svg", import.meta.url).href;
+
+const triggerScrollFrames = [
+  new URL("./assets/trigger-scroll-01.webp", import.meta.url).href,
+  new URL("./assets/trigger-scroll-02.webp", import.meta.url).href,
+  new URL("./assets/trigger-scroll-03.webp", import.meta.url).href,
+  new URL("./assets/trigger-scroll-04.webp", import.meta.url).href,
+  new URL("./assets/trigger-scroll-05.webp", import.meta.url).href,
+];
+
+const TRIGGER_SCROLL_STEPS = [
+  { title: "Engineered from the platform up", body: "A skateboard chassis carries the battery, motors, and suspension as one sealed unit, so every panel above it is free to change." },
+  { title: "Space built around you", body: "With no transmission tunnel or engine bay to route around, the cabin opens into a flat floor and room for every seat." },
+  { title: "A presence that arrives first", body: "Slim matrix lighting and a closed front face signal what's underneath: no grille to feed, no combustion to cool." },
+  { title: "One continuous line", body: "The roofline, glasshouse, and beltline resolve into a single silhouette, drawn without the breaks a fuel tank or exhaust would force." },
+  { title: "Precision to the smallest detail", body: "Down to the wheel, every surface is finished for a platform designed once and built to carry many bodies." },
+] as const;
 
 export type SectionCompositionProps = {
   className?: string;
@@ -101,5 +117,79 @@ export function NewsletterFooterSection({ className, style }: SectionComposition
         <a href="#contact">Contact</a>
       </div>
     </footer>
+  );
+}
+
+export function TriggerScrollSection({ className, style }: SectionCompositionProps) {
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    let raf = 0;
+    const readProgress = () => {
+      raf = 0;
+      const max = frame.scrollHeight - frame.clientHeight;
+      const ratio = max > 0 ? frame.scrollTop / max : 0;
+      const index = Math.min(TRIGGER_SCROLL_STEPS.length - 1, Math.floor(ratio * TRIGGER_SCROLL_STEPS.length));
+      setActive((current) => (current === index ? current : index));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(readProgress);
+    };
+
+    frame.addEventListener("scroll", onScroll, { passive: true });
+    readProgress();
+    return () => {
+      frame.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const step = TRIGGER_SCROLL_STEPS[active];
+  const stepCount = TRIGGER_SCROLL_STEPS.length;
+
+  return (
+    <section className={classNames("section-element section-element--trigger-scroll", className)} style={style} aria-labelledby="section-trigger-scroll-title">
+      <p className="trigger-scroll__sr-instructions">Scroll within this panel to step through the reveal.</p>
+      <div className="trigger-scroll__frame" ref={frameRef}>
+        <div className="trigger-scroll__track" style={{ "--trigger-scroll-steps": stepCount } as CSSProperties}>
+          {TRIGGER_SCROLL_STEPS.map((item) => (
+            <div key={item.title} className="trigger-scroll__spacer" aria-hidden="true" />
+          ))}
+          <div className="trigger-scroll__stage">
+            <div className="trigger-scroll__images" aria-hidden="true">
+              {triggerScrollFrames.map((src, index) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  className={classNames("trigger-scroll__image", index === active ? "is-active" : undefined)}
+                />
+              ))}
+            </div>
+            <div className="trigger-scroll__scrim" aria-hidden="true" />
+            <div className="trigger-scroll__progress" role="presentation">
+              {TRIGGER_SCROLL_STEPS.map((item, index) => (
+                <span key={item.title} className={classNames("trigger-scroll__dot", index === active ? "is-active" : undefined)} />
+              ))}
+            </div>
+            <div className="trigger-scroll__copy">
+              <span className="section-label trigger-scroll__label">
+                <span className="section-label__title">{`0${active + 1} / 0${stepCount}`}</span>
+                <span className="section-label__circle" aria-hidden="true" />
+              </span>
+              <h2 id="section-trigger-scroll-title">{step.title}</h2>
+              <p>{step.body}</p>
+            </div>
+            <span className={classNames("trigger-scroll__hint", active > 0 ? "is-hidden" : undefined)} aria-hidden="true">
+              Scroll to reveal
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
